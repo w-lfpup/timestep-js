@@ -17,8 +17,9 @@ class Timestep {
         this.#state.prevTimestamp = performance.now();
     }
     stop() {
-        window.cancelAnimationFrame(this.#state.receipt);
-        this.#state.receipt = undefined;
+        if (this.#state.receipt)
+            window.cancelAnimationFrame(this.#state.receipt);
+        this.#state.receipt = -1;
     }
     #loop(now) {
         this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
@@ -33,8 +34,8 @@ function getState(intrvlMs = MIN_STEP, msMaxIntegration = 250) {
         inverseInterval,
         msInterval,
         msMaxIntegration: msMaxIntegration ?? 250,
-        prevTimestamp: undefined,
-        receipt: undefined,
+        prevTimestamp: -1,
+        receipt: -1,
     };
 }
 function integrateAndRender(integrator, state, now) {

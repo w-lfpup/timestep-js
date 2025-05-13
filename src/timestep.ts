@@ -27,8 +27,8 @@ interface State {
 	msInterval: number;
 	inverseInterval: number;
 	msMaxIntegration: number;
-	prevTimestamp?: DOMHighResTimeStamp;
-	receipt?: number;
+	prevTimestamp: DOMHighResTimeStamp;
+	receipt: number;
 }
 
 class Timestep implements TimestepInterface {
@@ -51,8 +51,9 @@ class Timestep implements TimestepInterface {
 	}
 
 	stop() {
-		window.cancelAnimationFrame(this.#state.receipt);
-		this.#state.receipt = undefined;
+		if (this.#state.receipt) window.cancelAnimationFrame(this.#state.receipt);
+
+		this.#state.receipt = -1;
 	}
 
 	#loop(now: DOMHighResTimeStamp) {
@@ -70,8 +71,8 @@ function getState(intrvlMs: number = MIN_STEP, msMaxIntegration: number = 250) {
 		inverseInterval,
 		msInterval,
 		msMaxIntegration: msMaxIntegration ?? 250,
-		prevTimestamp: undefined,
-		receipt: undefined,
+		prevTimestamp: -1,
+		receipt: -1,
 	};
 }
 
