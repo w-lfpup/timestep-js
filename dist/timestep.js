@@ -45,7 +45,7 @@ function integrateAndRender(integrator, state, now) {
     }
     state.accumulator += now - state.prevTimestamp;
     state.prevTimestamp = now;
-    while (state.accumulator > state.msInterval) {
+    while (state.msInterval < state.accumulator) {
         integrator.integrate(state.msInterval, state.accumulator);
         state.accumulator -= state.msInterval;
     }
