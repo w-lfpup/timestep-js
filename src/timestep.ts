@@ -32,16 +32,19 @@ interface State {
 }
 
 class Timestep implements TimestepInterface {
-	#boundLoop: (now: DOMHighResTimeStamp) => void;
+	#boundLoop: (now: DOMHighResTimeStamp) => void = this.#loop.bind(this);
 	#integrator: IntegratorInterface;
 	#state: State;
 
 	constructor(params: Params) {
-		this.#boundLoop = this.#loop.bind(this);
-
 		let { integrator, msInterval, msMaxIntegration } = params;
 		this.#integrator = integrator;
 		this.#state = getState(msInterval, msMaxIntegration);
+	}
+
+	#loop(now: DOMHighResTimeStamp) {
+		this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
+		integrateAndRender(this.#integrator, this.#state, now);
 	}
 
 	start() {
@@ -52,13 +55,7 @@ class Timestep implements TimestepInterface {
 
 	stop() {
 		if (this.#state.receipt) window.cancelAnimationFrame(this.#state.receipt);
-
 		this.#state.receipt = undefined;
-	}
-
-	#loop(now: DOMHighResTimeStamp) {
-		this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
-		integrateAndRender(this.#integrator, this.#state, now);
 	}
 }
 
