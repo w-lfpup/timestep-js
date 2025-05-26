@@ -4,7 +4,7 @@ export { Timestep };
 // https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame#return_value
 
 interface IntegratorInterface {
-	integrate(msInterval: number): void;
+	integrate(msInterval: number, accumulator: number): void;
 	render(msInterval: number, remainderDelta: number): void;
 	error(err: Error): void;
 }
@@ -28,7 +28,7 @@ interface State {
 	inverseInterval: number;
 	msMaxIntegration: number;
 	prevTimestamp: DOMHighResTimeStamp;
-	receipt: number;
+	receipt?: number;
 }
 
 class Timestep implements TimestepInterface {
@@ -53,7 +53,7 @@ class Timestep implements TimestepInterface {
 	stop() {
 		if (this.#state.receipt) window.cancelAnimationFrame(this.#state.receipt);
 
-		this.#state.receipt = -1;
+		this.#state.receipt = undefined;
 	}
 
 	#loop(now: DOMHighResTimeStamp) {
@@ -72,7 +72,7 @@ function getState(intrvlMs: number = MIN_STEP, msMaxIntegration: number = 250) {
 		msInterval,
 		msMaxIntegration: msMaxIntegration ?? 250,
 		prevTimestamp: -1,
-		receipt: -1,
+		receipt: undefined,
 	};
 }
 
@@ -90,10 +90,10 @@ function integrateAndRender(
 	state.prevTimestamp = now;
 
 	while (state.accumulator > state.msInterval) {
-		integrator.integrate(state.msInterval);
+		integrator.integrate(state.msInterval, state.accumulator);
 		state.accumulator -= state.msInterval;
 	}
 
-	const integrated = state.accumulator * state.inverseInterval;
-	integrator.render(state.msInterval, integrated);
+	const interpolated = state.accumulator * state.inverseInterval;
+	integrator.render(state.msInterval, interpolated);
 }

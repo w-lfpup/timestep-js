@@ -14,7 +14,7 @@ class Integrator {
 		this.#ctx = canvas.getContext("2d");
 	}
 
-	integrate(msInterval) {
+	integrate(msInterval, _accumulator) {
 		integrate(msInterval, this.#canvas);
 	}
 
