@@ -1,7 +1,7 @@
 export type { TimestepInterface, IntegratorInterface };
 export { Timestep };
 interface IntegratorInterface {
-    integrate(msInterval: number): void;
+    integrate(msInterval: number, accumulator: number): void;
     render(msInterval: number, remainderDelta: number): void;
     error(err: Error): void;
 }

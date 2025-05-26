@@ -4,7 +4,7 @@ export { Timestep };
 // https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame#return_value
 
 interface IntegratorInterface {
-	integrate(msInterval: number): void;
+	integrate(msInterval: number, accumulator: number): void;
 	render(msInterval: number, remainderDelta: number): void;
 	error(err: Error): void;
 }
@@ -28,20 +28,23 @@ interface State {
 	inverseInterval: number;
 	msMaxIntegration: number;
 	prevTimestamp: DOMHighResTimeStamp;
-	receipt: number;
+	receipt?: number;
 }
 
 class Timestep implements TimestepInterface {
-	#boundLoop: (now: DOMHighResTimeStamp) => void;
+	#boundLoop: (now: DOMHighResTimeStamp) => void = this.#loop.bind(this);
 	#integrator: IntegratorInterface;
 	#state: State;
 
 	constructor(params: Params) {
-		this.#boundLoop = this.#loop.bind(this);
-
 		let { integrator, msInterval, msMaxIntegration } = params;
 		this.#integrator = integrator;
 		this.#state = getState(msInterval, msMaxIntegration);
+	}
+
+	#loop(now: DOMHighResTimeStamp) {
+		this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
+		integrateAndRender(this.#integrator, this.#state, now);
 	}
 
 	start() {
@@ -52,13 +55,7 @@ class Timestep implements TimestepInterface {
 
 	stop() {
 		if (this.#state.receipt) window.cancelAnimationFrame(this.#state.receipt);
-
-		this.#state.receipt = -1;
-	}
-
-	#loop(now: DOMHighResTimeStamp) {
-		this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
-		integrateAndRender(this.#integrator, this.#state, now);
+		this.#state.receipt = undefined;
 	}
 }
 
@@ -72,7 +69,7 @@ function getState(intrvlMs: number = MIN_STEP, msMaxIntegration: number = 250) {
 		msInterval,
 		msMaxIntegration: msMaxIntegration ?? 250,
 		prevTimestamp: -1,
-		receipt: -1,
+		receipt: undefined,
 	};
 }
 
@@ -89,11 +86,11 @@ function integrateAndRender(
 	state.accumulator += now - state.prevTimestamp;
 	state.prevTimestamp = now;
 
-	while (state.accumulator > state.msInterval) {
-		integrator.integrate(state.msInterval);
+	while (state.msInterval < state.accumulator) {
+		integrator.integrate(state.msInterval, state.accumulator);
 		state.accumulator -= state.msInterval;
 	}
 
-	const integrated = state.accumulator * state.inverseInterval;
-	integrator.render(state.msInterval, integrated);
+	const interpolated = state.accumulator * state.inverseInterval;
+	integrator.render(state.msInterval, interpolated);
 }

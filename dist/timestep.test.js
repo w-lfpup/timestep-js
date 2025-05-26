@@ -9,7 +9,7 @@ function sleep(time) {
 class Integrator {
     integrateCount = 0;
     renderCount = 0;
-    integrate(msInterval) {
+    integrate(msInterval, accumulator) {
         this.integrateCount += 1;
     }
     render(msInterval, integrationRemainderMs) {
