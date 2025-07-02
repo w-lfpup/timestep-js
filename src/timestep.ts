@@ -1,38 +1,35 @@
-export type { TimestepInterface, IntegratorInterface };
-export { Timestep };
-
 // https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame#return_value
 
-interface IntegratorInterface {
+export interface IntegratorInterface {
 	integrate(msInterval: number, accumulator: number): void;
 	render(msInterval: number, remainderDelta: number): void;
 	error(err: Error): void;
 }
 
-interface TimestepInterface {
+export interface TimestepInterface {
 	start(): void;
 	stop(): void;
 }
 
 let MIN_STEP = 1;
 
-interface Params {
+export interface Params {
 	integrator: IntegratorInterface;
 	msMaxIntegration?: number;
 	msInterval?: number;
 }
 
-interface State {
+export interface State {
 	accumulator: number;
 	msInterval: number;
 	inverseInterval: number;
 	msMaxIntegration: number;
 	prevTimestamp: DOMHighResTimeStamp;
-	receipt?: number;
+	receipt?: ReturnType<Window["requestAnimationFrame"]>;
 }
 
-class Timestep implements TimestepInterface {
-	#boundLoop: (now: DOMHighResTimeStamp) => void = this.#loop.bind(this);
+export class Timestep implements TimestepInterface {
+	#boundLoop = this.#loop.bind(this);
 	#integrator: IntegratorInterface;
 	#state: State;
 
@@ -42,7 +39,7 @@ class Timestep implements TimestepInterface {
 		this.#state = getState(msInterval, msMaxIntegration);
 	}
 
-	#loop(now: DOMHighResTimeStamp) {
+	#loop(now: DOMHighResTimeStamp): void {
 		this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
 		integrateAndRender(this.#integrator, this.#state, now);
 	}
