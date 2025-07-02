@@ -1,4 +1,4 @@
-import { Timestep } from "./timestep.js";
+import { Timestep } from "./mod.js";
 function sleep(time) {
     return new Promise((resolve) => {
         setTimeout(() => {
