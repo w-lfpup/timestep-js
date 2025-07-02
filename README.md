@@ -6,7 +6,7 @@ A fixed timestep.
 
 ### Integrator
 
-`Timestep` relies on an `integrator` to connect a game loop to state and renders.
+`Timestep` uses an `integrator` to connect a game loop with game state.
 
 Create the following interface:
 
@@ -59,12 +59,12 @@ timestep.stop();
 
 ### Example
 
-Checkout a
+Checkout a tiny
 (
-[code](https://github.com/wolfpup-software/timestep-js/tree/main/examples) |
-[live](https://wolfpup-software.github.io/timestep-js/examples/)
+[code](https://github.com/w-lfpup/timestep-js/tree/main/examples) |
+[live](https://w-lfpup.github.io/timestep-js/examples/)
 ) example.
 
 ## License
 
-BSD 3-Clause License
+`Timestamp-js` is released under the BSD 3-Clause License.
