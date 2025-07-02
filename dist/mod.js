@@ -1,4 +1,4 @@
-let MIN_STEP = 1;
+let MIN_STEP = 6;
 export class Timestep {
     #boundLoop = this.#loop.bind(this);
     #integrator;
@@ -24,16 +24,17 @@ export class Timestep {
         this.#state.receipt = undefined;
     }
 }
-function getState(intrvlMs = MIN_STEP, msMaxIntegration = 250) {
-    let msInterval = Math.max(intrvlMs, MIN_STEP);
+function getState(msInterval = MIN_STEP, msMaxIntegration = 250) {
+    msInterval = Math.max(msInterval, MIN_STEP);
+    msMaxIntegration = Math.max(1, msMaxIntegration);
     let inverseInterval = 1 / msInterval;
     return {
         accumulator: 0,
-        inverseInterval,
-        msInterval,
-        msMaxIntegration: msMaxIntegration ?? 250,
         prevTimestamp: -1,
         receipt: undefined,
+        inverseInterval,
+        msInterval,
+        msMaxIntegration,
     };
 }
 function integrateAndRender(integrator, state, now) {
@@ -44,7 +45,7 @@ function integrateAndRender(integrator, state, now) {
     state.accumulator += now - state.prevTimestamp;
     state.prevTimestamp = now;
     while (state.msInterval < state.accumulator) {
-        integrator.integrate(state.msInterval, state.accumulator);
+        integrator.integrate(state.msInterval);
         state.accumulator -= state.msInterval;
     }
     const interpolated = state.accumulator * state.inverseInterval;

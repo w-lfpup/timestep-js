@@ -25,7 +25,7 @@ class Integrator implements IntegratorInterface {
 		if (canvas) this.#ctx = canvas.getContext("2d");
 	}
 
-	integrate(_msInterval: number, _accumulator: number) {
+	integrate(_msInterval: number) {
 		rect.x.add(speed);
 
 		// wrap along x axis

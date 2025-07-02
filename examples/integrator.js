@@ -19,7 +19,7 @@ class Integrator {
         if (canvas)
             this.#ctx = canvas.getContext("2d");
     }
-    integrate(_msInterval, _accumulator) {
+    integrate(_msInterval) {
         rect.x.add(speed);
         // wrap along x axis
         if (this.#canvas && this.#canvas.width < rect.x.value) {

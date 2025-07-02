@@ -1,5 +1,5 @@
 export interface IntegratorInterface {
-    integrate(msInterval: number, accumulator: number): void;
+    integrate(msInterval: number): void;
     render(msInterval: number, remainderDelta: number): void;
     error(err: Error): void;
 }

@@ -1,5 +1,5 @@
 export interface IntegratorInterface {
-	integrate(msInterval: number, accumulator: number): void;
+	integrate(msInterval: number): void;
 	render(msInterval: number, remainderDelta: number): void;
 	error(err: Error): void;
 }
@@ -24,7 +24,7 @@ interface State {
 	receipt?: ReturnType<Window["requestAnimationFrame"]>;
 }
 
-let MIN_STEP = 1;
+let MIN_STEP = 6;
 
 export class Timestep implements TimestepInterface {
 	#boundLoop = this.#loop.bind(this);
@@ -54,17 +54,18 @@ export class Timestep implements TimestepInterface {
 	}
 }
 
-function getState(intrvlMs: number = MIN_STEP, msMaxIntegration: number = 250) {
-	let msInterval = Math.max(intrvlMs, MIN_STEP);
+function getState(msInterval: number = MIN_STEP, msMaxIntegration: number = 250) {
+	msInterval = Math.max(msInterval, MIN_STEP);
+	msMaxIntegration = Math.max(1, msMaxIntegration);
 	let inverseInterval = 1 / msInterval;
 
 	return {
 		accumulator: 0,
-		inverseInterval,
-		msInterval,
-		msMaxIntegration: msMaxIntegration ?? 250,
 		prevTimestamp: -1,
 		receipt: undefined,
+		inverseInterval,
+		msInterval,
+		msMaxIntegration,
 	};
 }
 
@@ -82,7 +83,7 @@ function integrateAndRender(
 	state.prevTimestamp = now;
 
 	while (state.msInterval < state.accumulator) {
-		integrator.integrate(state.msInterval, state.accumulator);
+		integrator.integrate(state.msInterval);
 		state.accumulator -= state.msInterval;
 	}
 

@@ -14,7 +14,7 @@ class Integrator implements IntegratorInterface {
 	integrateCount: number = 0;
 	renderCount: number = 0;
 
-	integrate(msInterval: number, accumulator: number) {
+	integrate(msInterval: number) {
 		this.integrateCount += 1;
 	}
 
