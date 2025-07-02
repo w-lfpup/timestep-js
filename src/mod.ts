@@ -54,7 +54,10 @@ export class Timestep implements TimestepInterface {
 	}
 }
 
-function getState(msInterval: number = MIN_STEP, msMaxIntegration: number = 250) {
+function getState(
+	msInterval: number = MIN_STEP,
+	msMaxIntegration: number = 250,
+) {
 	msInterval = Math.max(msInterval, MIN_STEP);
 	msMaxIntegration = Math.max(1, msMaxIntegration);
 	let inverseInterval = 1 / msInterval;
