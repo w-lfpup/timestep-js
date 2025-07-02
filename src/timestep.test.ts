@@ -1,6 +1,6 @@
-import type { IntegratorInterface } from "./timestep.js";
+import type { IntegratorInterface } from "./mod.js";
 
-import { Timestep } from "./timestep.js";
+import { Timestep } from "./mod.js";
 
 function sleep(time: number): Promise<void> {
 	return new Promise((resolve) => {
@@ -14,7 +14,7 @@ class Integrator implements IntegratorInterface {
 	integrateCount: number = 0;
 	renderCount: number = 0;
 
-	integrate(msInterval: number, accumulator: number) {
+	integrate(msInterval: number) {
 		this.integrateCount += 1;
 	}
 

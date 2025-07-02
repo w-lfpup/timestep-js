@@ -1,4 +1,4 @@
-import { Timestep } from "./timestep.js";
+import { Timestep } from "./mod.js";
 function sleep(time) {
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -9,7 +9,7 @@ function sleep(time) {
 class Integrator {
     integrateCount = 0;
     renderCount = 0;
-    integrate(msInterval, accumulator) {
+    integrate(msInterval) {
         this.integrateCount += 1;
     }
     render(msInterval, integrationRemainderMs) {

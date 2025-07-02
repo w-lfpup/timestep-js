@@ -1,14 +1,17 @@
-export { Timestep };
+// https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame#return_value
 let MIN_STEP = 1;
-class Timestep {
-    #boundLoop;
+export class Timestep {
+    #boundLoop = this.#loop.bind(this);
     #integrator;
     #state;
     constructor(params) {
-        this.#boundLoop = this.#loop.bind(this);
         let { integrator, msInterval, msMaxIntegration } = params;
         this.#integrator = integrator;
         this.#state = getState(msInterval, msMaxIntegration);
+    }
+    #loop(now) {
+        this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
+        integrateAndRender(this.#integrator, this.#state, now);
     }
     start() {
         if (this.#state.receipt)
@@ -20,10 +23,6 @@ class Timestep {
         if (this.#state.receipt)
             window.cancelAnimationFrame(this.#state.receipt);
         this.#state.receipt = undefined;
-    }
-    #loop(now) {
-        this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
-        integrateAndRender(this.#integrator, this.#state, now);
     }
 }
 function getState(intrvlMs = MIN_STEP, msMaxIntegration = 250) {
