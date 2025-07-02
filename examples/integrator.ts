@@ -20,10 +20,9 @@ class Integrator implements IntegratorInterface {
 	#canvas: HTMLCanvasElement | null;
 	#ctx: CanvasRenderingContext2D | null = null;
 
-	constructor(canvas: HTMLCanvasElement | null) {		
+	constructor(canvas: HTMLCanvasElement | null) {
 		this.#canvas = canvas;
-		if (canvas)
-			this.#ctx = canvas.getContext("2d");
+		if (canvas) this.#ctx = canvas.getContext("2d");
 	}
 
 	integrate(_msInterval: number, _accumulator: number) {
@@ -38,7 +37,12 @@ class Integrator implements IntegratorInterface {
 	render(_msInterval: number, deltaRemainder: number) {
 		if (this.#canvas && this.#ctx) {
 			this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-			this.#ctx.fillRect(rect.x.interpolate(deltaRemainder), rect.y, size, size);
+			this.#ctx.fillRect(
+				rect.x.interpolate(deltaRemainder),
+				rect.y,
+				size,
+				size,
+			);
 		}
 	}
 
