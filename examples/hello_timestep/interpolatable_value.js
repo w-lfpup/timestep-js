@@ -1,10 +1,9 @@
 /*
     Example of an Interpolatable Value.
         
-    Interpolation returns the previous state and a percentage of the
-    difference defined by a delta value between [0-1].
+    Interpolation returns a value between the current and previous state based on a delta between [0-1].
 
-    Operations like "translation" need update BOTH [prev state, current state].
+    Operations like "translation" need to update BOTH [prev state, current state].
 */
 export class InterpolatedNumber {
     #prevNum;
