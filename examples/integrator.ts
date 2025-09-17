@@ -34,7 +34,7 @@ class Integrator implements IntegratorInterface {
 		}
 	}
 
-	render(_msInterval: number, deltaRemainder: number) {
+	render(deltaRemainder: number) {
 		if (this.#canvas && this.#ctx) {
 			this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
 			this.#ctx.fillRect(
