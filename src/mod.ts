@@ -1,6 +1,6 @@
 export interface IntegratorInterface {
-	integrate(msInterval: number): void;
-	render(msInterval: number, remainderDelta: number): void;
+	integrate(intervalMs: number): void;
+	render(remainderDelta: number): void;
 	error(err: Error): void;
 }
 
@@ -11,15 +11,15 @@ export interface TimestepInterface {
 
 export interface Params {
 	integrator: IntegratorInterface;
-	msMaxIntegration?: number;
-	msInterval?: number;
+	maxIntegrationMs?: number;
+	intervalMs?: number;
 }
 
 interface State {
 	accumulator: number;
-	msInterval: number;
+	intervalMs: number;
 	inverseInterval: number;
-	msMaxIntegration: number;
+	maxIntegrationMs: number;
 	prevTimestamp: DOMHighResTimeStamp;
 	receipt?: ReturnType<Window["requestAnimationFrame"]>;
 }
@@ -32,9 +32,9 @@ export class Timestep implements TimestepInterface {
 	#state: State;
 
 	constructor(params: Params) {
-		let { integrator, msInterval, msMaxIntegration } = params;
+		let { integrator, intervalMs, maxIntegrationMs } = params;
 		this.#integrator = integrator;
-		this.#state = getState(msInterval, msMaxIntegration);
+		this.#state = getState(intervalMs, maxIntegrationMs);
 	}
 
 	#loop(now: DOMHighResTimeStamp): void {
@@ -55,20 +55,20 @@ export class Timestep implements TimestepInterface {
 }
 
 function getState(
-	msInterval: number = MIN_STEP,
-	msMaxIntegration: number = 250,
+	intervalMs: number = MIN_STEP,
+	maxIntegrationMs: number = 250,
 ) {
-	msInterval = Math.max(msInterval, MIN_STEP);
-	msMaxIntegration = Math.max(1, msMaxIntegration);
-	let inverseInterval = 1 / msInterval;
+	intervalMs = Math.max(intervalMs, MIN_STEP);
+	maxIntegrationMs = Math.max(1, maxIntegrationMs);
+	let inverseInterval = 1 / intervalMs;
 
 	return {
 		accumulator: 0,
 		prevTimestamp: -1,
 		receipt: undefined,
 		inverseInterval,
-		msInterval,
-		msMaxIntegration,
+		intervalMs,
+		maxIntegrationMs,
 	};
 }
 
@@ -78,18 +78,18 @@ function integrateAndRender(
 	now: DOMHighResTimeStamp,
 ) {
 	const delta = now - state.prevTimestamp;
-	if (delta > state.msMaxIntegration) {
+	if (delta > state.maxIntegrationMs) {
 		integrator.error(new Error("Timestep exceeded maximum integration time."));
 	}
 
 	state.accumulator += now - state.prevTimestamp;
 	state.prevTimestamp = now;
 
-	while (state.msInterval < state.accumulator) {
-		integrator.integrate(state.msInterval);
-		state.accumulator -= state.msInterval;
+	while (state.intervalMs < state.accumulator) {
+		integrator.integrate(state.intervalMs);
+		state.accumulator -= state.intervalMs;
 	}
 
 	const interpolated = state.accumulator * state.inverseInterval;
-	integrator.render(state.msInterval, interpolated);
+	integrator.render(interpolated);
 }

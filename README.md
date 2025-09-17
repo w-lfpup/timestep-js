@@ -20,7 +20,7 @@ class Integrator implements IntegratorInterface {
 		// tick through physics step
 	}
 
-	render(msInterval: number, deltaRemainder: number): void {
+	render(deltaRemainder: number): void {
 		// Draw to canvas or update dom.
 		//
 		// Interpolate between [previous state, current state]
@@ -45,9 +45,9 @@ Pass an `Integrator` to an instance of `Timestep`.
 import { Timestep } from "timestep";
 import { Integrator } from "my_integrator.ts";
 
-let msInterval = 10; // millisecond integration interval
+let intervalMs = 10; // millisecond integration interval
 let integrator = new Integrator();
-const timestep = new Timestep({ msInterval, integrator });
+const timestep = new Timestep({ intervalMs, integrator });
 ```
 
 Then call `start` or `stop` where appropriate.
