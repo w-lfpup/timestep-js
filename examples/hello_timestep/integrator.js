@@ -26,7 +26,7 @@ class Integrator {
             rect.x.translate(-size);
         }
     }
-    render(_msInterval, deltaRemainder) {
+    render(deltaRemainder) {
         if (this.#canvas && this.#ctx) {
             this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
             this.#ctx.fillRect(rect.x.interpolate(deltaRemainder), rect.y, size, size);

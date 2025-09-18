@@ -1,6 +1,6 @@
 export interface IntegratorInterface {
-    integrate(msInterval: number): void;
-    render(msInterval: number, remainderDelta: number): void;
+    integrate(intervalMs: number): void;
+    render(remainderDelta: number): void;
     error(err: Error): void;
 }
 export interface TimestepInterface {
@@ -9,8 +9,8 @@ export interface TimestepInterface {
 }
 export interface Params {
     integrator: IntegratorInterface;
-    msMaxIntegration?: number;
-    msInterval?: number;
+    maxIntegrationMs?: number;
+    intervalMs?: number;
 }
 export declare class Timestep implements TimestepInterface {
     #private;

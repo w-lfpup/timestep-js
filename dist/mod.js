@@ -4,9 +4,9 @@ export class Timestep {
     #integrator;
     #state;
     constructor(params) {
-        let { integrator, msInterval, msMaxIntegration } = params;
+        let { integrator, intervalMs, maxIntegrationMs } = params;
         this.#integrator = integrator;
-        this.#state = getState(msInterval, msMaxIntegration);
+        this.#state = getState(intervalMs, maxIntegrationMs);
     }
     #loop(now) {
         this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
@@ -24,30 +24,30 @@ export class Timestep {
         this.#state.receipt = undefined;
     }
 }
-function getState(msInterval = MIN_STEP, msMaxIntegration = 250) {
-    msInterval = Math.max(msInterval, MIN_STEP);
-    msMaxIntegration = Math.max(1, msMaxIntegration);
-    let inverseInterval = 1 / msInterval;
+function getState(intervalMs = MIN_STEP, maxIntegrationMs = 250) {
+    intervalMs = Math.max(intervalMs, MIN_STEP);
+    maxIntegrationMs = Math.max(1, maxIntegrationMs);
+    let inverseInterval = 1 / intervalMs;
     return {
         accumulator: 0,
         prevTimestamp: -1,
         receipt: undefined,
         inverseInterval,
-        msInterval,
-        msMaxIntegration,
+        intervalMs,
+        maxIntegrationMs,
     };
 }
 function integrateAndRender(integrator, state, now) {
     const delta = now - state.prevTimestamp;
-    if (delta > state.msMaxIntegration) {
+    if (delta > state.maxIntegrationMs) {
         integrator.error(new Error("Timestep exceeded maximum integration time."));
     }
     state.accumulator += now - state.prevTimestamp;
     state.prevTimestamp = now;
-    while (state.msInterval < state.accumulator) {
-        integrator.integrate(state.msInterval);
-        state.accumulator -= state.msInterval;
+    while (state.intervalMs < state.accumulator) {
+        integrator.integrate(state.intervalMs);
+        state.accumulator -= state.intervalMs;
     }
     const interpolated = state.accumulator * state.inverseInterval;
-    integrator.render(state.msInterval, interpolated);
+    integrator.render(interpolated);
 }

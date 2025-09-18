@@ -61,8 +61,8 @@ timestep.stop();
 
 Checkout a tiny
 (
-[code](https://github.com/w-lfpup/timestep-js/tree/main/examples) |
-[live](https://w-lfpup.github.io/timestep-js/examples/)
+[code](https://github.com/w-lfpup/timestep-js/tree/main/examples/hello_timestep/) |
+[live](https://w-lfpup.github.io/timestep-js/examples/hello_timestep/)
 ) example.
 
 ## License

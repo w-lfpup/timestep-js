@@ -9,10 +9,10 @@ function sleep(time) {
 class Integrator {
     integrateCount = 0;
     renderCount = 0;
-    integrate(msInterval) {
+    integrate(intervalMs) {
         this.integrateCount += 1;
     }
-    render(msInterval, integrationRemainderMs) {
+    render(integrationRemainderMs) {
         this.renderCount += 1;
     }
     error(e) { }
@@ -20,7 +20,7 @@ class Integrator {
 async function testIntegrationAndRender() {
     const assertions = [];
     const integrator = new Integrator();
-    const timestep = new Timestep({ integrator, msInterval: 10 });
+    const timestep = new Timestep({ integrator, intervalMs: 10 });
     timestep.start();
     await sleep(1000);
     timestep.stop();

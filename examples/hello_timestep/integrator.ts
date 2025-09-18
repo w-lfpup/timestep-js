@@ -12,9 +12,9 @@ let rect = {
 };
 
 /*
-	An example of a "renderer" class.
+	An example of an integrator.
 
-	This renderer interacts with the "app" in sliding_square.js
+	This renderer interacts with the app state above in sliding_square.js
 */
 class Integrator implements IntegratorInterface {
 	#canvas: HTMLCanvasElement | null;
@@ -34,7 +34,7 @@ class Integrator implements IntegratorInterface {
 		}
 	}
 
-	render(_msInterval: number, deltaRemainder: number) {
+	render(deltaRemainder: number) {
 		if (this.#canvas && this.#ctx) {
 			this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
 			this.#ctx.fillRect(

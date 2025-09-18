@@ -14,11 +14,11 @@ class Integrator implements IntegratorInterface {
 	integrateCount: number = 0;
 	renderCount: number = 0;
 
-	integrate(msInterval: number) {
+	integrate(intervalMs: number) {
 		this.integrateCount += 1;
 	}
 
-	render(msInterval: number, integrationRemainderMs: number) {
+	render(integrationRemainderMs: number) {
 		this.renderCount += 1;
 	}
 
@@ -29,7 +29,7 @@ async function testIntegrationAndRender() {
 	const assertions = [];
 
 	const integrator = new Integrator();
-	const timestep = new Timestep({ integrator, msInterval: 10 });
+	const timestep = new Timestep({ integrator, intervalMs: 10 });
 
 	timestep.start();
 
