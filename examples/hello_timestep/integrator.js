@@ -7,9 +7,9 @@ let rect = {
     y: 50,
 };
 /*
-    An example of a "renderer" class.
+    An example of an integrator.
 
-    This renderer interacts with the "app" in sliding_square.js
+    This renderer interacts with the app state above in sliding_square.js
 */
 class Integrator {
     #canvas;
