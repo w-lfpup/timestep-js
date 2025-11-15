@@ -9,18 +9,18 @@ export class Timestep {
         this.#state = getState(intervalMs, maxIntegrationMs);
     }
     #loop(now) {
-        this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
+        this.#state.receipt = requestAnimationFrame(this.#boundLoop);
         integrateAndRender(this.#integrator, this.#state, now);
     }
     start() {
         if (this.#state.receipt)
             return;
-        this.#state.receipt = window.requestAnimationFrame(this.#boundLoop);
+        this.#state.receipt = requestAnimationFrame(this.#boundLoop);
         this.#state.prevTimestamp = performance.now();
     }
     stop() {
         if (this.#state.receipt)
-            window.cancelAnimationFrame(this.#state.receipt);
+            cancelAnimationFrame(this.#state.receipt);
         this.#state.receipt = undefined;
     }
 }

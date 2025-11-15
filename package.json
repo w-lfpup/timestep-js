@@ -1,22 +1,26 @@
 {
-	"name": "timestep",
-	"version": "0.1.0",
-	"description": "fixed timestep for the browser",
+	"name": "@w-lfpup/timestep",
 	"type": "module",
 	"main": "dist/mod.js",
+	"description": "A fixed timestep for the browser",
+	"license": "BSD-3-Clause",
+	"version": "0.1.0",
 	"scripts": {
-		"prepare": "npm run build",
+		"prepare": "npm run build && npm run build:examples && npm run build:tests",
 		"build": "npx tsc --project ./src",
 		"build:examples": "npx tsc --project ./examples",
-		"test": "npx jackrabbit --file ./dist/mod.test.js",
+		"build:tests": "npx tsc --project ./tests",
+		"test": "npx jackrabbit --file ./tests/mod.test.js",
 		"format": "npx prettier --write ./"
 	},
 	"devDependencies": {
 		"@types/node": "^22.9.0",
-		"jackrabbit": "github:w-lfpup/jackrabbit-js",
+		"@w-lfpup/jackrabbit": "^0.1.0",
 		"prettier": "^3.3.3",
 		"typescript": "^5.6.3"
 	},
-	"author": "wolfpup",
-	"license": "BSD-3-Clause"
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/w-lfpup/timestep-js.git"
+	}
 }
