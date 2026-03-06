@@ -1,5 +1,7 @@
 # Timestep
 
+[![Tests](https://github.com/w-lfpup/timestep-js/actions/workflows/tests.yml/badge.svg)](https://github.com/w-lfpup/timestep-js/actions/workflows/tests.yml)
+
 A fixed timestep.
 
 ## How to use
@@ -43,7 +45,7 @@ Pass an `Integrator` to an instance of `Timestep`.
 
 ```ts
 import { Timestep } from "timestep";
-import { Integrator } from "my_integrator.ts";
+import { Integrator } from "./my_integrator.ts";
 
 let intervalMs = 10; // millisecond integration interval
 let integrator = new Integrator();
