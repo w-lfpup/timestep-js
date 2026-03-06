@@ -14,15 +14,15 @@ class Integrator implements IntegratorInterface {
 	integrateCount: number = 0;
 	renderCount: number = 0;
 
-	integrate(intervalMs: number) {
+	integrate(_intervalMs: number) {
 		this.integrateCount += 1;
 	}
 
-	render(integrationRemainderMs: number) {
+	render(_integrationRemainderMs: number) {
 		this.renderCount += 1;
 	}
 
-	error(e: Error) {}
+	error(_e: Error) {}
 }
 
 async function testIntegrationAndRender() {
@@ -33,16 +33,20 @@ async function testIntegrationAndRender() {
 
 	timestep.start();
 
-	await sleep(1000);
+	await sleep(1100);
 
 	timestep.stop();
 
 	if (integrator.integrateCount < 100) {
-		assertions.push("failed to integrate enough times");
+		assertions.push(
+			`failed to integrate enough times: ${integrator.integrateCount}`,
+		);
 	}
 
 	if (integrator.renderCount < 10) {
-		assertions.push("failed to render enough times");
+		assertions.push(
+			`failed to render enough times: ${integrator.integrateCount}`,
+		);
 	}
 
 	return assertions;

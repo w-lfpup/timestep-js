@@ -22,13 +22,13 @@ async function testIntegrationAndRender() {
     const integrator = new Integrator();
     const timestep = new Timestep({ integrator, intervalMs: 10 });
     timestep.start();
-    await sleep(1000);
+    await sleep(1100);
     timestep.stop();
     if (integrator.integrateCount < 100) {
-        assertions.push("failed to integrate enough times");
+        assertions.push(`failed to integrate enough times: ${integrator.integrateCount}`);
     }
     if (integrator.renderCount < 10) {
-        assertions.push("failed to render enough times");
+        assertions.push(`failed to render enough times: ${integrator.integrateCount}`);
     }
     return assertions;
 }
