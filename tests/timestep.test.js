@@ -9,13 +9,13 @@ function sleep(time) {
 class Integrator {
     integrateCount = 0;
     renderCount = 0;
-    integrate(intervalMs) {
+    integrate(_intervalMs) {
         this.integrateCount += 1;
     }
-    render(integrationRemainderMs) {
+    render(_integrationRemainderMs) {
         this.renderCount += 1;
     }
-    error(e) { }
+    error(_e) { }
 }
 async function testIntegrationAndRender() {
     const assertions = [];
